@@ -99,6 +99,7 @@ def main():
     parser.add_argument("--all", action="store_true", help="Run all tools: APIs + JobSpy + Crawl4AI + Naukri + Startups + sync")
     parser.add_argument("--clean-dead", action="store_true", help="Verify and clean dead/expired links")
     parser.add_argument("--autofill", type=str, help="Launch 1-click browser autofill for a row # or URL")
+    parser.add_argument("--tailor-apply", "--assist", type=str, dest="tailor_apply", help="Launch intelligent tailored application assistant (pre-fills tailored answers, you press submit)")
     parser.add_argument("--ats-full", action="store_true", help="Run reverse ATS directory scanner")
     parser.add_argument("--sync", action="store_true", help="Consolidate and style opportunities.xlsx")
     parser.add_argument("--auto-apply", type=int, nargs="?", const=5, help="Headlessly auto-apply to top N ATS jobs (default: 5)")
@@ -109,13 +110,14 @@ def main():
     # Default if no arguments provided: show help and stats
     has_action = any([
         args.apis, args.jobspy, args.crawl4ai, args.naukri, args.startups,
-        args.all, args.clean_dead, args.autofill, getattr(args, "ats_full", False),
+        args.all, args.clean_dead, args.autofill, args.tailor_apply, getattr(args, "ats_full", False),
         args.sync, args.stats, args.auto_apply is not None, args.autonomous
     ])
     if not has_action:
         show_stats()
         print("\nCommands:")
         print("  python job_pipeline.py --autonomous    # 100% Hands-off: discover, clean, apply, and track")
+        print("  python job_pipeline.py --tailor-apply 1 # Tailor answers, pre-fill form, and review before submit")
         print("  python job_pipeline.py --auto-apply 5  # Headlessly auto-apply to top 5 verified ATS jobs")
         print("  python job_pipeline.py --all           # Run complete discovery suite across all channels")
         print("  python job_pipeline.py --apis          # Fast direct APIs (Greenhouse/Lever/SmartRecruiters)")
@@ -129,6 +131,11 @@ def main():
 
     if args.autonomous:
         run_cmd([PYTHON_BIN, "run_autonomous_pipeline.py"], "Running 100% Autonomous Pipeline")
+        return
+
+    if args.tailor_apply or args.autofill:
+        target = args.tailor_apply or args.autofill
+        run_cmd([PYTHON_BIN, "autofill_assistant.py", target], f"Launching Tailored Application Assistant for {target}")
         return
 
     if args.auto_apply is not None:

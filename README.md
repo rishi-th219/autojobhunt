@@ -112,14 +112,14 @@ python job_pipeline.py --all
 # Audit link liveness and remove expired postings
 python job_pipeline.py --clean-dead
 
+# 1-Click tailored assistant: pre-fills custom answers & resume, YOU review and press submit
+python job_pipeline.py --tailor-apply 5
+
 # Headlessly auto-apply to top 5 jobs
 python job_pipeline.py --auto-apply 5
 
 # Or run 100% hands-off (discover -> clean -> apply -> track)
 python job_pipeline.py --autonomous
-
-# 1-Click browser autofill for row #5 in opportunities.xlsx
-python job_pipeline.py --autofill 5
 ```
 
 ---

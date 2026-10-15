@@ -98,8 +98,11 @@ python job_pipeline.py --auto-apply 5
 # 8. 100% Autonomous Hands-off Pipeline (Discover -> Clean -> Apply -> Track)
 python job_pipeline.py --autonomous
 
-# 9. 1-Click Form Autofill Assistant (Opens a visible browser for row #5)
-python job_pipeline.py --autofill 5
+# 9. Intelligent Tailored Form Assistant (Pre-fills tailored answers & resumes, YOU review & press submit)
+python job_pipeline.py --tailor-apply 5
+
+# 10. Quick Form Autofill Assistant for a specific URL or row #
+python job_pipeline.py --autofill "https://jobs.lever.co/company/job-id"
 ```
 
 ---

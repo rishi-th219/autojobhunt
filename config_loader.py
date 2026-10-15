@@ -8,6 +8,7 @@ without hardcoding personal credentials in the core scripts.
 import os
 import sys
 import json
+import re
 import yaml
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -154,7 +155,93 @@ def is_valid_role(title):
     tgt = get_targeting_config()
     return not any(ek in t_lower for ek in tgt["exclude_title_keywords"])
 
-def find_resume_file():
+def get_tailored_resume_filename(role_title=None):
+    """
+    Determines the appropriate tailored resume filename based on job role keywords.
+    Supported tracks:
+      1. SQL Developer / Database / ETL / Data Engineering
+      2. Power BI Developer / BI Reporting / Visualization
+      3. Business Analyst / Strategy / Operations
+      4. Data Analyst / Analytics (Default)
+    """
+    cand = get_candidate_profile()
+    name_slug = cand.get("full_name", "").strip().replace(" ", "_")
+    prefix = f"{name_slug}_" if name_slug and name_slug != "Candidate_User" else ""
+
+    if not role_title:
+        return f"{prefix}Data_Analyst_Resume.pdf"
+
+    r_lower = str(role_title).lower().strip()
+
+    matches = []
+    tracks = [
+        ("PowerBI", r'\b(power\s*bi|powerbi|power-bi|tableau|looker|oac|bi\s+developer|bi\s+engineer|bi\s+analyst|business\s+intelligence|dashboard|reporting)\b', f"{prefix}PowerBI_Developer_Resume.pdf"),
+        ("SQL", r'\b(sql|database|dba|data\s+engineer|data\s+engineering|etl|warehouse|dwh|postgres|postgresql|oracle|mariadb|mysql)\b', f"{prefix}SQL_Developer_Resume.pdf"),
+        ("BA", r'\b(business\s+analyst|business\s+analytics|strategy|strategic|operations\s+analyst|operation\s+analyst|consultant|product\s+analyst|risk\s+analyst|process\s+analyst|systems?\s+analyst)\b', f"{prefix}Business_Analyst_Resume.pdf"),
+        ("DA", r'\b(data\s+analyst|data\s+analytics|analytics|analyst|data)\b', f"{prefix}Data_Analyst_Resume.pdf"),
+    ]
+    for track_name, pattern, filename in tracks:
+        m = re.search(pattern, r_lower)
+        if m:
+            matches.append((m.start(), filename))
+
+    if matches:
+        matches.sort(key=lambda x: x[0])
+        return matches[0][1]
+
+    return f"{prefix}Data_Analyst_Resume.pdf"
+
+def find_resume_file(role_title=None):
+    """
+    Selects and returns the absolute path to the optimal tailored resume based on the job role.
+    Prioritizes tailoring directories matching the specific role track:
+      - SQL Developer -> *SQL_Developer_Resume.(pdf|docx)
+      - Power BI Developer -> *PowerBI_Developer_Resume.(pdf|docx)
+      - Business Analyst -> *Business_Analyst_Resume.(pdf|docx)
+      - Data Analyst -> *Data_Analyst_Resume.(pdf|docx)
+    Falls back gracefully to standard root resumes if tailoring files are missing.
+    """
+    target_filename = get_tailored_resume_filename(role_title)
+    base_name = os.path.splitext(target_filename)[0]
+
+    # Candidate directories containing tailored resumes
+    search_dirs = [
+        os.path.abspath(os.path.join(PROJECT_ROOT, "..", "tailoring")),
+        os.path.abspath(os.path.join(PROJECT_ROOT, "tailoring")),
+        os.path.abspath(os.path.join(PROJECT_ROOT, "..", "portfolio", "tailoring")),
+        os.path.abspath(os.path.join(PROJECT_ROOT, "..", "portfolio", "assets")),
+    ]
+
+    # 1. Search for exact role-matched PDF then DOCX
+    for sdir in search_dirs:
+        if os.path.isdir(sdir):
+            for ext in [".pdf", ".docx"]:
+                candidate_path = os.path.join(sdir, f"{base_name}{ext}")
+                if os.path.exists(candidate_path) and os.path.isfile(candidate_path):
+                    return candidate_path
+
+            # Fuzzy match track keyword in directory if candidate prefix differs
+            track_keywords = ["PowerBI", "SQL", "Business_Analyst", "Data_Analyst"]
+            matched_track = next((tk for tk in track_keywords if tk.lower() in base_name.lower()), None)
+            if matched_track:
+                try:
+                    for f in os.listdir(sdir):
+                        if (f.lower().endswith(".pdf") or f.lower().endswith(".docx")) and matched_track.lower() in f.lower().replace("-", "_"):
+                            return os.path.join(sdir, f)
+                except Exception:
+                    pass
+
+    # 2. Fallback to default tailored Data Analyst resume in search directories
+    for sdir in search_dirs:
+        if os.path.isdir(sdir):
+            try:
+                for f in os.listdir(sdir):
+                    if (f.lower().endswith(".pdf") or f.lower().endswith(".docx")) and "data_analyst" in f.lower().replace("-", "_").replace(" ", "_"):
+                        return os.path.join(sdir, f)
+            except Exception:
+                pass
+
+    # 3. Standard fallbacks in candidate config or project root
     cand = get_candidate_profile()
     configured_resume = cand.get("resume_file")
 
@@ -180,6 +267,7 @@ def find_resume_file():
             return path
 
     return None
+
 
 def get_corrections():
     rejected_urls = set()

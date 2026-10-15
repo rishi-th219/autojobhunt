@@ -29,7 +29,10 @@ import re
 import yaml
 import subprocess
 from datetime import datetime
-from playwright.sync_api import sync_playwright
+try:
+    from playwright.sync_api import sync_playwright
+except ImportError:
+    sync_playwright = None
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 PROFILE_YML = os.path.join(PROJECT_ROOT, "config", "profile.yml")
@@ -58,8 +61,8 @@ def is_valid_location(location):
 def is_valid_role(title):
     return config_loader.is_valid_role(title)
 
-def find_resume_file():
-    return config_loader.find_resume_file()
+def find_resume_file(role_title=None):
+    return config_loader.find_resume_file(role_title)
 
 
 def is_already_applied(company, role, url):
@@ -487,7 +490,7 @@ def fill_smartrecruiters(page, cand, resume_path):
 def execute_auto_apply(company, role, url, dry_run=False):
     """Executes headless application filling and submission for an ATS job posting"""
     cand = load_profile()
-    resume_path = find_resume_file()
+    resume_path = find_resume_file(role)
     
     slug_comp = re.sub(r"[^a-zA-Z0-9]", "_", company).lower()[:20]
     slug_role = re.sub(r"[^a-zA-Z0-9]", "_", role).lower()[:20]
@@ -496,9 +499,15 @@ def execute_auto_apply(company, role, url, dry_run=False):
     print("\n" + "=" * 60)
     print(f"🤖 HEADLESS AUTO-APPLY: {company} — {role}")
     print(f"URL: {url}")
+    print(f"Resume: {os.path.basename(resume_path) if resume_path else 'None'} (Role Track Matched)")
     print(f"Mode: {'[DRY RUN - Verification Only]' if dry_run else '[LIVE SUBMIT]'}")
     print("=" * 60)
     
+    if sync_playwright is None:
+        print("  ❌ Error: Playwright Python library is not installed in this environment.")
+        print("     Please install with: pip install playwright && playwright install chromium")
+        return False, "Playwright Library Missing"
+
     with sync_playwright() as p:
         browser = p.chromium.launch(
             headless=True,
@@ -702,11 +711,13 @@ if __name__ == "__main__":
     parser.add_argument("--batch", type=int, default=5, help="Number of applications to process")
     parser.add_argument("--all", action="store_true", help="Process all available eligible ATS jobs")
     parser.add_argument("--url", type=str, help="Apply directly to a specific ATS job URL")
+    parser.add_argument("--role", type=str, default="Data Analyst", help="Target job role for tailored resume matching")
+    parser.add_argument("--company", type=str, default="Target Firm", help="Target firm name")
     parser.add_argument("--dry-run", action="store_true", help="Fill and verify without clicking submit")
     args = parser.parse_args()
 
     if args.url:
-        execute_auto_apply("Target Firm", "Target Role", args.url, dry_run=args.dry_run)
+        execute_auto_apply(args.company, args.role, args.url, dry_run=args.dry_run)
     elif args.all:
         run_batch(max_applications=999, dry_run=args.dry_run)
     else:

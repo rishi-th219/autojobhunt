@@ -18,7 +18,10 @@ import csv
 import time
 import re
 from datetime import datetime
-from playwright.sync_api import sync_playwright
+try:
+    from playwright.sync_api import sync_playwright
+except ImportError:
+    sync_playwright = None
 
 import config_loader
 import tailor_engine
@@ -251,14 +254,14 @@ def fill_form(page, cand, company, role, jd_text=""):
     except Exception:
         pass
 
-    # 12. Auto-attach Resume if file input present
-    resume_file = config_loader.find_resume_file()
+    # 12. Auto-attach Tailored Resume if file input present
+    resume_file = config_loader.find_resume_file(role)
     if resume_file:
         try:
             file_input = page.locator("input[type='file']").first
             if file_input.count() > 0:
                 file_input.set_input_files(resume_file)
-                print(f"  ✓ Attached resume file: {os.path.basename(resume_file)}")
+                print(f"  ✓ Attached tailored resume: {os.path.basename(resume_file)} (Matched role: '{role}')")
                 filled_count += 1
         except Exception:
             pass
@@ -308,6 +311,11 @@ def run_assistant(target_arg):
     print(f"Target:     {company} — {role}")
     print(f"URL:        {url}")
     print("-" * 65)
+    if sync_playwright is None:
+        print("Error: Playwright Python library is not installed in this environment.")
+        print("Please install with: pip install playwright && playwright install chromium")
+        return
+
     print("Launching Chromium headed browser...")
 
     with sync_playwright() as p:

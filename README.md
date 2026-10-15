@@ -23,9 +23,112 @@
   <a href="README.vi.md">Tiếng Việt</a>
 </p>
 
-> [!TIP]
-> **Looking for the autonomous Python discovery & headless auto-apply bot?**  
-> See the [Autonomous Python Job Bot Guide](README_BOT.md) for 8-channel ATS discovery, link liveness verification, OpenXML spreadsheet compilation, and Playwright auto-apply.
+<div align="center">
+
+# 🚀 Career-Ops: Autonomous Bot Edition
+### The Open-Source AI Job Search Agent — Supercharged with Autonomous Python Discovery & Headless Auto-Apply
+
+[![GitHub Repo](https://img.shields.io/badge/GitHub-career--ops--bot-blue?logo=github)](https://github.com/rishi-th219/career-ops-bot)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-brightgreen?logo=python)](https://python.org)
+[![Playwright](https://img.shields.io/badge/Playwright-Automated%20Apply-orange?logo=playwright)](https://playwright.dev)
+[![Upstream](https://img.shields.io/badge/Forked%20From-career--ops-blueviolet)](https://github.com/career-ops-hq/career-ops)
+
+</div>
+
+---
+
+## 🌟 About This Enhanced Fork
+
+This repository is an **autonomous extension of [career-ops](https://github.com/career-ops-hq/career-ops)** (originally created by [santifer](https://github.com/santifer)).
+
+While upstream `career-ops` gives you a powerful LLM agent for evaluating postings, tailoring CVs, and tracking pipeline stages, this fork adds an **autonomous Python automation layer** designed for hands-off job acquisition:
+
+- ⚡ **8-Channel Multi-Portal Job Discovery**:
+  - Direct ATS APIs: Greenhouse, Lever, Ashby, SmartRecruiters (zero LLM token cost).
+  - Remote tech APIs: Remotive, Jobicy, Arbeitnow.
+  - Dynamic SPA web crawler powered by **Crawl4AI** with stealth mode for React/Angular/Vue portals.
+  - Indian portal scrapers for **Naukri** and **Instahyre**.
+  - Startup directories: Hacker News "Who is Hiring?" & Y Combinator talent networks.
+- 🛡️ **Deep Link Liveness & Expiry Auditing**:
+  - Multi-tier validation (direct ATS APIs + 20+ regex closed-job patterns) automatically purges dead/closed postings from your spreadsheets and tracker so you never waste time on stale roles.
+- 📊 **Zero-Dependency OpenXML Spreadsheet Engine**:
+  - Automatically consolidates, cleans, and compiles all discovered leads into formatted `opportunities.xlsx` and `opportunities.csv` files without heavy third-party spreadsheet libraries.
+- 🤖 **100% Autonomous Headless Auto-Apply**:
+  - Playwright browser bot with stealth anti-detection that automatically fills applicant details, handles React custom dropdowns, answers screening questions (work auth, experience, notice period), uploads your resume, takes proof screenshots, and records submissions.
+- 🖱️ **1-Click Form Autofill Assistant**:
+  - Need human oversight? Run `python job_pipeline.py --autofill <row#>` to launch a real browser with candidate details pre-filled so you just click Submit.
+- ⏰ **Set-and-Forget Cron Daemon**:
+  - Automated morning scheduling (`install_cron.sh`) to run the full pipeline autonomously every day.
+- 🔒 **Privacy-First & Fully De-Personalized**:
+  - Single-file configuration via `config/profile.example.yml` -> `config/profile.yml`.
+  - Comprehensive `.gitignore` guards to ensure personal resumes, spreadsheets, and confirmation screenshots are never committed to Git.
+
+📖 *For the complete technical manual and CLI reference, see [README_BOT.md](README_BOT.md).*
+
+---
+
+## 🚀 How to Fork & Use This For Yourself
+
+Anyone can fork this repository and run their own autonomous job hunting pipeline in 4 simple steps:
+
+### 1. Fork & Clone
+Click the **Fork** button at the top right of this repository, then clone your fork:
+```bash
+git clone https://github.com/<your-username>/career-ops-bot.git
+cd career-ops-bot
+```
+
+### 2. Setup Python Environment
+```bash
+# Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install required packages
+pip install -r requirements.txt
+
+# Install Playwright browser engine
+playwright install chromium
+```
+
+### 3. Personalize Your Profile & Resume
+1. Copy the example profile template:
+   ```bash
+   cp config/profile.example.yml config/profile.yml
+   ```
+2. Open `config/profile.yml` and add your details:
+   - Contact info (Name, Email, Phone, LinkedIn, GitHub)
+   - Screening responses (Education, Notice Period, Work Authorization)
+   - Target locations (e.g. `["bengaluru", "pune", "remote", "india"]`)
+   - Target roles & keywords (e.g. `["data analyst", "machine learning engineer", "data engineer"]`)
+3. Drop your resume in the project root as `resume.pdf`.
+
+### 4. Run the Pipeline!
+
+```bash
+# Run multi-channel discovery and compile opportunities.xlsx
+python job_pipeline.py --all
+
+# Audit link liveness and remove expired postings
+python job_pipeline.py --clean-dead
+
+# Headlessly auto-apply to top 5 jobs
+python job_pipeline.py --auto-apply 5
+
+# Or run 100% hands-off (discover -> clean -> apply -> track)
+python job_pipeline.py --autonomous
+
+# 1-Click browser autofill for row #5 in opportunities.xlsx
+python job_pipeline.py --autofill 5
+```
+
+---
+
+## 🏛️ Original Career-Ops System (Upstream)
+
+Below is the original documentation from the upstream [career-ops](https://github.com/career-ops-hq/career-ops) project by [santifer](https://github.com/santifer), which powers the LLM evaluation and report generation modes.
+
+---
 
 <!-- The non-breaking spaces (&nbsp;) and word joiners (&#8288;) below decide where each line wraps on a phone. Keep them when editing. -->
 

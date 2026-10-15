@@ -202,6 +202,47 @@ playwright-report/
 documents/*
 !documents/.gitkeep
 !documents/README.md
-# Intake fingerprints — the recorded source filenames may themselves carry
-# PII (e.g. cv/jane-doe-master-cv.pdf). #1723
 data/intake-state.json
+
+# ==============================================================================
+# Career-Ops Autonomous Job Bot — User Data & Privacy Protection
+# ==============================================================================
+# Python Virtual Environments & Caches
+.venv/
+.venv
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# Job Pipeline User Data & Spreadsheets (PII / Personal State)
+opportunities.csv
+opportunities.xlsx
+new_jobs_found.json
+pending_urls.txt
+data/archived_expired_opportunities.csv
+data/cron_scan.log
+data/autonomous_run.log
+data/autonomous_cron.log
+
+# Personal Resumes & Documents
+*.pdf
+*.docx
+*.doc
+!docs/**/*.pdf
+
+# Output screenshots & logs (Contains personal form submissions & proofs)
+output/confirmations/
+output/skipped/
+*.log
+
+# Personal Session & Handover Notes
+HANDOVER.md
+MEMORY.md
+config/corrections.json
+generate_resume_docx.py
+extract_opportunities.py
+

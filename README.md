@@ -23,6 +23,10 @@
   <a href="README.vi.md">Tiếng Việt</a>
 </p>
 
+> [!TIP]
+> **Looking for the autonomous Python discovery & headless auto-apply bot?**  
+> See the [Autonomous Python Job Bot Guide](README_BOT.md) for 8-channel ATS discovery, link liveness verification, OpenXML spreadsheet compilation, and Playwright auto-apply.
+
 <!-- The non-breaking spaces (&nbsp;) and word joiners (&#8288;) below decide where each line wraps on a phone. Keep them when editing. -->
 
 <p align="center"><a href="https://github.com/santifer"><img src="docs/avatar-santifer.png" width="48" height="48" align="middle" alt="Santiago Fernández de Valderrama Aparicio"></a>&nbsp;&nbsp;<a href="https://github.com/santifer"><strong>santifer</strong></a></p>

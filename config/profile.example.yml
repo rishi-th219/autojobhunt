@@ -32,6 +32,81 @@ candidate:
   # Optional framing for the CV photo: rounded (default), circle, or square.
   photo_style: rounded
 
+  # Autonomous Apply Bot & Screening Details
+  first_name: "Jane"
+  last_name: "Smith"
+  current_org: "Tech Solutions Inc."
+  notice_period: "Immediate / 15 Days"
+  years_experience: "1"
+  education: "B.Tech in Computer Science and Engineering"
+  degree: "Bachelor's Degree"
+  school: "University / Institute of Technology"
+  discipline: "Computer Science"
+  authorized_in_country: "Yes"
+  require_sponsorship: "No"
+  resume_file: "resume.pdf" # Path relative to workspace or absolute
+
+# Autonomous Bot Discovery & Search Targeting
+targeting:
+  # Locations to accept (lowercase keywords matched against job locations)
+  target_locations:
+    - "bengaluru"
+    - "bangalore"
+    - "karnataka"
+    - "blr"
+    - "pune"
+    - "remote"
+    - "hybrid"
+    - "anywhere"
+    - "india"
+    - "pan-india"
+
+  # Explicit locations to exclude (cities/countries outside your search)
+  excluded_locations:
+    - "united states"
+    - "usa"
+    - "united kingdom"
+    - "uk"
+    - "germany"
+    - "canada"
+    - "australia"
+    - "san francisco"
+    - "new york"
+    - "london"
+    - "seattle"
+
+  # Role titles / positive keywords to match in discovery
+  positive_keywords:
+    - "data analyst"
+    - "business analyst"
+    - "bi analyst"
+    - "bi developer"
+    - "business intelligence"
+    - "data engineer"
+    - "junior data engineer"
+    - "associate data engineer"
+    - "machine learning engineer"
+    - "applied ai"
+    - "data scientist"
+    - "junior data scientist"
+    - "applied ml engineer"
+    - "analytics engineer"
+
+  # Excluded title keywords (seniority or types you do not want)
+  exclude_title_keywords:
+    - "intern"
+    - "internship"
+    - "working student"
+    - "werkstudent"
+    - "praktikum"
+    - "senior"
+    - "lead"
+    - "principal"
+    - "director"
+    - "vp"
+    - "manager"
+    - "architect"
+
 target_roles:
   # Your North Star roles — what you're optimizing for
   primary:
@@ -40,6 +115,7 @@ target_roles:
   # Archetypes help the evaluation system score fit
   archetypes:
     - name: "AI/ML Engineer"
+
       level: "Senior/Staff"
       fit: "primary"        # primary = dream role, secondary = good fit, adjacent = stretch
     - name: "AI Product Manager"

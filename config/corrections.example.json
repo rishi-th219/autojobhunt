@@ -1,0 +1,14 @@
+{
+  "rejected_urls": [
+    "https://example.com/expired-or-invalid-job"
+  ],
+  "known_corrections": {
+    "https://example.com/job/sample-posting": {
+      "Firm name": "Sample Firm",
+      "Job role": "Data Analyst",
+      "experience required": "0-2 years",
+      "top skills required": "Python, SQL, Tableau",
+      "job location": "Remote"
+    }
+  }
+}

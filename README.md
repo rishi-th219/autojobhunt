@@ -54,9 +54,11 @@ While upstream `career-ops` gives you a powerful LLM agent for evaluating postin
 - 📊 **Zero-Dependency OpenXML Spreadsheet Engine**:
   - Automatically consolidates, cleans, and compiles all discovered leads into formatted `opportunities.xlsx` and `opportunities.csv` files without heavy third-party spreadsheet libraries.
 - 🤖 **100% Autonomous Headless Auto-Apply**:
-  - Playwright browser bot with stealth anti-detection that automatically fills applicant details, handles React custom dropdowns, answers screening questions (work auth, experience, notice period), uploads your resume, takes proof screenshots, and records submissions.
-- 🖱️ **1-Click Form Autofill Assistant**:
-  - Need human oversight? Run `python job_pipeline.py --autofill <row#>` to launch a real browser with candidate details pre-filled so you just click Submit.
+  - Playwright browser bot with stealth anti-detection that automatically fills applicant details, handles React custom dropdowns, answers screening questions (work auth, experience, notice period), uploads your role-matched resume, takes proof screenshots, and records submissions.
+- 🎯 **Dynamic Role-Matched Resume Tailoring**:
+  - Automatically matches and attaches track-specific tailored resumes (e.g., SQL Developer, Power BI, Business Analyst, Data Analyst) based on the target posting's role title.
+- 🖱️ **Intelligent Form Autofill & Tailoring Assistant**:
+  - Need human oversight? Run `python job_pipeline.py --tailor-apply <row#>` to launch a real headed browser. It extracts live JD requirements, drafts grounded answers to open-ended essay questions ("Why this company?", cover letter), attaches your tailored resume, and fills screening dropdowns. You review and hit Submit.
 - ⏰ **Set-and-Forget Cron Daemon**:
   - Automated morning scheduling (`install_cron.sh`) to run the full pipeline autonomously every day.
 - 🔒 **Privacy-First & Fully De-Personalized**:

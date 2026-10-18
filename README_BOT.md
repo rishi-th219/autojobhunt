@@ -24,8 +24,17 @@ An end-to-end, zero-manual-intervention Python job acquisition pipeline. Automat
    - Autonomous Playwright browser automation with anti-bot evasion arguments.
    - Form field resolution (First/Last name, Email, Phone, LinkedIn, GitHub, Current Org, Notice Period, Education).
    - Handles custom React-select dropdowns, work authorization questions, and consent checkboxes.
-   - Automatically uploads your resume (`.pdf` or `.docx`).
+   - Automatically uploads role-matched resume (`.pdf` or `.docx`).
    - Takes pre-submit and confirmation proof screenshots in `output/confirmations/`.
+
+5. **Intelligent Form Autofill & Tailoring Assistant (`--tailor-apply`)**:
+   - Launches a real headed Chromium browser via Playwright.
+   - Scrapes live JD text from the posting page.
+   - Generates grounded, tailored responses to essay/screening textareas (e.g., "Why this company?", cover letter notes).
+   - Pre-fills all applicant details and dropdowns, leaving the browser open for your final review and submission.
+
+6. **Dynamic Role-Matched Resume Tailoring**:
+   - Automatically matches track-specific tailored resumes (SQL Developer, Power BI, Business Analyst, Data Analyst) to each job based on role title keywords.
 
 ---
 

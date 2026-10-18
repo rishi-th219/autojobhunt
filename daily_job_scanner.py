@@ -103,7 +103,20 @@ POSITIVE_KEYWORDS = [
     "ai/ml engineer",
     "ai/ml developer",
     "machine learning associate",
-    "dsai"
+    "dsai",
+    "python developer",
+    "junior python developer",
+    "associate python developer",
+    "python engineer",
+    "python backend",
+    "backend developer",
+    "backend engineer",
+    "junior backend engineer",
+    "fastapi",
+    "flask",
+    "software engineer - python",
+    "sde - python",
+    "software development engineer - python"
 ]
 
 NEGATIVE_KEYWORDS = [

@@ -93,7 +93,20 @@ POSITIVE_KEYWORDS = [
     "ai/ml engineer",
     "ai/ml developer",
     "machine learning associate",
-    "dsai"
+    "dsai",
+    "python developer",
+    "junior python developer",
+    "associate python developer",
+    "python engineer",
+    "python backend",
+    "backend developer",
+    "backend engineer",
+    "junior backend engineer",
+    "fastapi",
+    "flask",
+    "software engineer - python",
+    "sde - python",
+    "software development engineer - python"
 ]
 
 NEGATIVE_KEYWORDS = [
@@ -194,7 +207,12 @@ async def scan_naukri(crawler, r_conf, seen):
         ("Cognizant Analytics / Tech", "https://www.naukri.com/cognizant-jobs?experience=0&experience=2"),
         ("TCS Analytics / Tech", "https://www.naukri.com/tcs-jobs?experience=0&experience=2"),
         ("Infosys Analytics / Tech", "https://www.naukri.com/infosys-jobs?experience=0&experience=2"),
-        ("Wipro Analytics / Tech", "https://www.naukri.com/wipro-jobs?experience=0&experience=2")
+        ("Wipro Analytics / Tech", "https://www.naukri.com/wipro-jobs?experience=0&experience=2"),
+        ("Python Developer (BLR)", "https://www.naukri.com/python-developer-jobs-in-bengaluru?experience=0&experience=2"),
+        ("Python Backend Developer (BLR)", "https://www.naukri.com/python-backend-developer-jobs-in-bengaluru?experience=0&experience=2"),
+        ("Python Developer (Remote)", "https://www.naukri.com/python-developer-jobs?wfhType=0&experience=0&experience=2"),
+        ("Python Developer (Pune)", "https://www.naukri.com/python-developer-jobs-in-pune?experience=0&experience=2"),
+        ("FastAPI / Flask Developer (India)", "https://www.naukri.com/fastapi-jobs?experience=0&experience=2")
     ]
     discovered = []
     for label, url in queries:
@@ -284,6 +302,9 @@ async def scan_instahyre(crawler, r_conf, seen):
         ("Data Analyst (Pune)", "https://www.instahyre.com/jobs-in-pune/?search=data%20analyst"),
         ("Data Engineer (Pune)", "https://www.instahyre.com/jobs-in-pune/?search=data%20engineer"),
         ("ML Engineer (Pune)", "https://www.instahyre.com/jobs-in-pune/?search=machine%20learning"),
+        ("Python Developer (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=python"),
+        ("Python Backend / FastAPI (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=fastapi"),
+        ("Python Developer (Pune)", "https://www.instahyre.com/jobs-in-pune/?search=python"),
     ]
     discovered = []
     for label, url in queries:

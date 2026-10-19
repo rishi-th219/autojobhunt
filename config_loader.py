@@ -59,7 +59,7 @@ DEFAULT_EXCLUDED_LOCATIONS = [
 ]
 
 DEFAULT_EXCLUDE_TITLE_KEYWORDS = [
-    "intern", "internship", "working student", "werkstudent", "praktikum", "praktikant",
+    "working student", "werkstudent", "praktikum", "praktikant",
     "gyakornok", "staż", "stage -", "stage ", "premaster"
 ]
 
@@ -153,6 +153,17 @@ def is_valid_role(title):
         return False
     t_lower = str(title).lower()
     tgt = get_targeting_config()
+
+    # Check internship policy: allow only AI, ML, Data Science, and Research internships
+    if any(w in t_lower for w in ["intern", "internship", "trainee", "praktikum", "werkstudent", "gyakornok", "staż"]):
+        allowed_intern_tracks = [
+            "machine learning", "ml", "ai", "artificial intelligence", "data science",
+            "data scientist", "deep learning", "computer vision", "nlp", "genai",
+            "generative ai", "llm", "research", "r&d"
+        ]
+        if not any(kw in t_lower for kw in allowed_intern_tracks):
+            return False
+
     return not any(ek in t_lower for ek in tgt["exclude_title_keywords"])
 
 def get_tailored_resume_filename(role_title=None):

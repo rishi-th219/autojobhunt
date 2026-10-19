@@ -111,19 +111,27 @@ POSITIVE_KEYWORDS = [
     "flask",
     "software engineer - python",
     "sde - python",
-    "software development engineer - python"
+    "software development engineer - python",
+    "machine learning intern",
+    "ml intern",
+    "ai intern",
+    "artificial intelligence intern",
+    "data science intern",
+    "data scientist intern",
+    "deep learning intern",
+    "computer vision intern",
+    "nlp intern",
+    "genai intern",
+    "generative ai intern",
+    "llm intern",
+    "research intern",
+    "r&d intern",
+    "ai research intern",
+    "contract",
+    "contractor"
 ]
 
 NEGATIVE_KEYWORDS = [
-    "intern",
-    "internship",
-    "praktikum",
-    "werkstudent",
-    "gyakornok",
-    "staż",
-    "stage -",
-    "stage ",
-    "premaster",
     ".net",
     "java developer",
     "ios",
@@ -200,6 +208,16 @@ def matches_filters(title, location="", company=""):
 
     if any(neg in title_lower for neg in NEGATIVE_KEYWORDS):
         return False
+
+    # Check internship policy: allow only AI, ML, Data Science, and Research internships
+    if any(w in title_lower for w in ["intern", "internship", "trainee", "praktikum", "werkstudent", "gyakornok", "staż"]):
+        allowed_intern_tracks = [
+            "machine learning", "ml", "ai", "artificial intelligence", "data science",
+            "data scientist", "deep learning", "computer vision", "nlp", "genai",
+            "generative ai", "llm", "research", "r&d"
+        ]
+        if not any(kw in title_lower for kw in allowed_intern_tracks):
+            return False
 
     if location:
         loc_lower = str(location).lower()

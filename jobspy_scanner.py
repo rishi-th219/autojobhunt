@@ -87,11 +87,26 @@ POSITIVE_KEYWORDS = [
     "ai/ml developer",
     "machine learning associate",
     "dsai",
+    "machine learning intern",
+    "ml intern",
+    "ai intern",
+    "artificial intelligence intern",
+    "data science intern",
+    "data scientist intern",
+    "deep learning intern",
+    "computer vision intern",
+    "nlp intern",
+    "genai intern",
+    "generative ai intern",
+    "llm intern",
+    "research intern",
+    "r&d intern",
+    "ai research intern",
+    "contract",
+    "contractor"
 ]
 
 NEGATIVE_KEYWORDS = [
-    "intern",
-    "internship",
     ".net",
     "java developer",
     "ios",
@@ -230,6 +245,16 @@ def matches_filters(title, location, company="", url="", blacklist=None):
     if any(neg in title_lower for neg in NEGATIVE_KEYWORDS):
         return False
 
+    # Check internship policy: allow only AI, ML, Data Science, and Research internships
+    if any(w in title_lower for w in ["intern", "internship", "trainee"]):
+        allowed_intern_tracks = [
+            "machine learning", "ml", "ai", "artificial intelligence", "data science",
+            "data scientist", "deep learning", "computer vision", "nlp", "genai",
+            "generative ai", "llm", "research", "r&d"
+        ]
+        if not any(kw in title_lower for kw in allowed_intern_tracks):
+            return False
+
     # Location check
     if not is_valid_location(location):
         return False
@@ -278,6 +303,20 @@ def run_jobspy_scan(results_per_query=10, hours_old=72):
         {"site_name": ["linkedin"], "search_term": "Python Developer", "location": "India", "is_remote": True},
         {"site_name": ["linkedin"], "search_term": "Python Backend Developer", "location": "India", "is_remote": True},
         {"site_name": ["linkedin"], "search_term": "FastAPI Developer", "location": "India", "is_remote": True},
+        # LinkedIn AI/ML/Data Science Interns
+        {"site_name": ["linkedin"], "search_term": "Machine Learning Intern", "location": "Bengaluru, Karnataka, India"},
+        {"site_name": ["linkedin"], "search_term": "Data Science Intern", "location": "Bengaluru, Karnataka, India"},
+        {"site_name": ["linkedin"], "search_term": "AI Intern", "location": "Bengaluru, Karnataka, India"},
+        {"site_name": ["linkedin"], "search_term": "Research Intern", "location": "Bengaluru, Karnataka, India"},
+        {"site_name": ["linkedin"], "search_term": "Machine Learning Intern", "location": "India", "is_remote": True},
+        {"site_name": ["linkedin"], "search_term": "Data Science Intern", "location": "India", "is_remote": True},
+        # LinkedIn Contract Roles
+        {"site_name": ["linkedin"], "search_term": "Contract Data Analyst", "location": "Bengaluru, Karnataka, India"},
+        {"site_name": ["linkedin"], "search_term": "Contract Python Developer", "location": "Bengaluru, Karnataka, India"},
+        {"site_name": ["linkedin"], "search_term": "Contract Machine Learning Engineer", "location": "Bengaluru, Karnataka, India"},
+        {"site_name": ["linkedin"], "search_term": "Contract Data Engineer", "location": "Bengaluru, Karnataka, India"},
+        {"site_name": ["linkedin"], "search_term": "Contract Data Analyst", "location": "India", "is_remote": True},
+        {"site_name": ["linkedin"], "search_term": "Contract Python Developer", "location": "India", "is_remote": True},
         # Indeed India
         {"site_name": ["indeed"], "search_term": "Data Analyst", "location": "Bengaluru, Karnataka", "country_indeed": "india"},
         {"site_name": ["indeed"], "search_term": "Business Analyst", "location": "Bengaluru, Karnataka", "country_indeed": "india"},
@@ -286,6 +325,10 @@ def run_jobspy_scan(results_per_query=10, hours_old=72):
         {"site_name": ["indeed"], "search_term": "Python Backend Developer", "location": "Bengaluru, Karnataka", "country_indeed": "india"},
         {"site_name": ["indeed"], "search_term": "Junior Machine Learning Engineer", "location": "Bengaluru, Karnataka", "country_indeed": "india"},
         {"site_name": ["indeed"], "search_term": "Junior Research Fellow", "location": "Bengaluru, Karnataka", "country_indeed": "india"},
+        {"site_name": ["indeed"], "search_term": "Machine Learning Intern", "location": "Bengaluru, Karnataka", "country_indeed": "india"},
+        {"site_name": ["indeed"], "search_term": "Data Science Intern", "location": "Bengaluru, Karnataka", "country_indeed": "india"},
+        {"site_name": ["indeed"], "search_term": "Contract Data Analyst", "location": "Bengaluru, Karnataka", "country_indeed": "india"},
+        {"site_name": ["indeed"], "search_term": "Contract Python Developer", "location": "Bengaluru, Karnataka", "country_indeed": "india"},
     ]
 
     log(f"Starting JobSpy search across {len(search_configs)} query profiles (max {results_per_query} results/query, past {hours_old}h)...")

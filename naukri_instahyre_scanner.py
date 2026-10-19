@@ -106,19 +106,27 @@ POSITIVE_KEYWORDS = [
     "flask",
     "software engineer - python",
     "sde - python",
-    "software development engineer - python"
+    "software development engineer - python",
+    "machine learning intern",
+    "ml intern",
+    "ai intern",
+    "artificial intelligence intern",
+    "data science intern",
+    "data scientist intern",
+    "deep learning intern",
+    "computer vision intern",
+    "nlp intern",
+    "genai intern",
+    "generative ai intern",
+    "llm intern",
+    "research intern",
+    "r&d intern",
+    "ai research intern",
+    "contract",
+    "contractor"
 ]
 
 NEGATIVE_KEYWORDS = [
-    "intern",
-    "internship",
-    "praktikum",
-    "werkstudent",
-    "gyakornok",
-    "staż",
-    "stage -",
-    "stage ",
-    "premaster",
     ".net",
     "java developer",
     "ios",
@@ -185,6 +193,15 @@ def matches_filters(title):
         return False
     if any(neg in title_lower for neg in NEGATIVE_KEYWORDS):
         return False
+    # Check internship policy: allow only AI, ML, Data Science, and Research internships
+    if any(w in title_lower for w in ["intern", "internship", "trainee", "praktikum", "werkstudent", "gyakornok", "staż"]):
+        allowed_intern_tracks = [
+            "machine learning", "ml", "ai", "artificial intelligence", "data science",
+            "data scientist", "deep learning", "computer vision", "nlp", "genai",
+            "generative ai", "llm", "research", "r&d"
+        ]
+        if not any(kw in title_lower for kw in allowed_intern_tracks):
+            return False
     return True
 
 async def scan_naukri(crawler, r_conf, seen):
@@ -212,7 +229,16 @@ async def scan_naukri(crawler, r_conf, seen):
         ("Python Backend Developer (BLR)", "https://www.naukri.com/python-backend-developer-jobs-in-bengaluru?experience=0&experience=2"),
         ("Python Developer (Remote)", "https://www.naukri.com/python-developer-jobs?wfhType=0&experience=0&experience=2"),
         ("Python Developer (Pune)", "https://www.naukri.com/python-developer-jobs-in-pune?experience=0&experience=2"),
-        ("FastAPI / Flask Developer (India)", "https://www.naukri.com/fastapi-jobs?experience=0&experience=2")
+        ("FastAPI / Flask Developer (India)", "https://www.naukri.com/fastapi-jobs?experience=0&experience=2"),
+        ("Machine Learning Intern (BLR)", "https://www.naukri.com/machine-learning-intern-jobs-in-bengaluru?experience=0&experience=1"),
+        ("Data Science Intern (BLR)", "https://www.naukri.com/data-science-intern-jobs-in-bengaluru?experience=0&experience=1"),
+        ("AI Intern (BLR)", "https://www.naukri.com/artificial-intelligence-intern-jobs-in-bengaluru?experience=0&experience=1"),
+        ("Machine Learning Intern (Remote)", "https://www.naukri.com/machine-learning-intern-jobs?wfhType=0&experience=0&experience=1"),
+        ("Data Science Intern (Remote)", "https://www.naukri.com/data-science-intern-jobs?wfhType=0&experience=0&experience=1"),
+        ("Contract Data Analyst (India)", "https://www.naukri.com/contract-data-analyst-jobs"),
+        ("Contract Python Developer (India)", "https://www.naukri.com/contract-python-developer-jobs"),
+        ("Contract Machine Learning (India)", "https://www.naukri.com/contract-machine-learning-jobs"),
+        ("Contract Data Engineer (India)", "https://www.naukri.com/contract-data-engineer-jobs")
     ]
     discovered = []
     for label, url in queries:
@@ -305,6 +331,9 @@ async def scan_instahyre(crawler, r_conf, seen):
         ("Python Developer (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=python"),
         ("Python Backend / FastAPI (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=fastapi"),
         ("Python Developer (Pune)", "https://www.instahyre.com/jobs-in-pune/?search=python"),
+        ("ML Intern (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=machine%20learning%20intern"),
+        ("Data Science Intern (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=data%20science%20intern"),
+        ("Contract Tech Roles (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=contract"),
     ]
     discovered = []
     for label, url in queries:

@@ -30,8 +30,13 @@ POSITIVE_KEYWORDS = [
     "business analyst",
     "bi analyst",
     "bi developer",
+    "power bi developer",
+    "powerbi developer",
     "business intelligence",
     "reporting analyst",
+    "mis analyst",
+    "mis executive",
+    "mis reporting",
     "analytics analyst",
     "data analytics",
     "product analyst",
@@ -238,7 +243,15 @@ async def scan_naukri(crawler, r_conf, seen):
         ("Contract Data Analyst (India)", "https://www.naukri.com/contract-data-analyst-jobs"),
         ("Contract Python Developer (India)", "https://www.naukri.com/contract-python-developer-jobs"),
         ("Contract Machine Learning (India)", "https://www.naukri.com/contract-machine-learning-jobs"),
-        ("Contract Data Engineer (India)", "https://www.naukri.com/contract-data-engineer-jobs")
+        ("Contract Data Engineer (India)", "https://www.naukri.com/contract-data-engineer-jobs"),
+        ("Power BI Developer (BLR)", "https://www.naukri.com/power-bi-developer-jobs-in-bengaluru?experience=0&experience=2"),
+        ("Power BI Developer (Remote)", "https://www.naukri.com/power-bi-developer-jobs?wfhType=0&experience=0&experience=2"),
+        ("BI Developer (BLR)", "https://www.naukri.com/bi-developer-jobs-in-bengaluru?experience=0&experience=2"),
+        ("SQL Analyst (BLR)", "https://www.naukri.com/sql-analyst-jobs-in-bengaluru?experience=0&experience=2"),
+        ("Reporting Analyst (BLR)", "https://www.naukri.com/reporting-analyst-jobs-in-bengaluru?experience=0&experience=2"),
+        ("MIS Analyst / Executive (BLR)", "https://www.naukri.com/mis-analyst-jobs-in-bengaluru?experience=0&experience=2"),
+        ("MIS Analyst / Executive (Remote)", "https://www.naukri.com/mis-analyst-jobs?wfhType=0&experience=0&experience=2"),
+        ("MIS Analyst / Executive (Pune)", "https://www.naukri.com/mis-analyst-jobs-in-pune?experience=0&experience=2")
     ]
     discovered = []
     for label, url in queries:
@@ -334,6 +347,9 @@ async def scan_instahyre(crawler, r_conf, seen):
         ("ML Intern (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=machine%20learning%20intern"),
         ("Data Science Intern (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=data%20science%20intern"),
         ("Contract Tech Roles (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=contract"),
+        ("Power BI Developer (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=power%20bi"),
+        ("SQL Analyst (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=sql%20analyst"),
+        ("Reporting / MIS Analyst (BLR)", "https://www.instahyre.com/jobs-in-bangalore/?search=reporting%20analyst"),
     ]
     discovered = []
     for label, url in queries:

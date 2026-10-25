@@ -68,7 +68,15 @@ def classify_role(title):
         categories.append("AI / ML")
     if any(k in t for k in ["python", "fastapi", "flask", "django", "backend"]):
         categories.append("Python / Backend")
-    if any(k in t for k in ["data analyst", "business analyst", "bi ", "power bi", "tableau", "analytics analyst", "reporting"]):
+    if any(k in t for k in ["data analyst", "analytics analyst", "insights analyst", "operations analyst", "decision support"]):
+        categories.append("Data Analyst")
+    if "business analyst" in t or "product analyst" in t:
+        categories.append("Business Analyst")
+    if any(k in t for k in ["power bi", "powerbi", "bi developer", "bi analyst", "business intelligence", "tableau"]):
+        categories.append("BI & Power BI")
+    if any(k in t for k in ["sql analyst", "reporting analyst", "mis analyst", "mis executive", "mis reporting", "reporting"]):
+        categories.append("SQL / MIS / Reporting")
+    if any(k in t for k in ["data analyst", "business analyst", "bi", "sql", "reporting", "mis"]):
         categories.append("Data Analytics")
     if any(k in t for k in ["data engineer", "etl", "data warehouse", "pipeline"]):
         categories.append("Data Engineering")
@@ -146,6 +154,9 @@ def get_stats():
     aiml = sum(1 for o in opps if "AI / ML" in o["categories"])
     python = sum(1 for o in opps if "Python / Backend" in o["categories"])
     analytics = sum(1 for o in opps if "Data Analytics" in o["categories"])
+    powerbi = sum(1 for o in opps if "BI & Power BI" in o["categories"])
+    business_analyst = sum(1 for o in opps if "Business Analyst" in o["categories"])
+    sql_mis = sum(1 for o in opps if "SQL / MIS / Reporting" in o["categories"])
     applied = sum(1 for o in opps if o["is_applied"])
     
     return {
@@ -155,6 +166,9 @@ def get_stats():
         "aiml": aiml,
         "python": python,
         "analytics": analytics,
+        "powerbi": powerbi,
+        "business_analyst": business_analyst,
+        "sql_mis": sql_mis,
         "applied": applied
     }
 
@@ -961,11 +975,14 @@ HTML_CONTENT = """<!DOCTYPE html>
 
       <div class="filter-chips">
         <div class="chip active" data-cat="All" onclick="filterCategory('All')">All Roles</div>
+        <div class="chip" data-cat="Data Analyst" onclick="filterCategory('Data Analyst')">📊 Data Analyst</div>
+        <div class="chip" data-cat="Business Analyst" onclick="filterCategory('Business Analyst')">📈 Business Analyst</div>
+        <div class="chip" data-cat="BI & Power BI" onclick="filterCategory('BI & Power BI')">⚡ Power BI / BI</div>
+        <div class="chip" data-cat="SQL / MIS / Reporting" onclick="filterCategory('SQL / MIS / Reporting')">📑 SQL / MIS / Reporting</div>
         <div class="chip" data-cat="AI / ML" onclick="filterCategory('AI / ML')">🤖 AI / ML</div>
         <div class="chip" data-cat="Internship" onclick="filterCategory('Internship')">🎓 Internships</div>
         <div class="chip" data-cat="Python / Backend" onclick="filterCategory('Python / Backend')">🐍 Python / Backend</div>
         <div class="chip" data-cat="Contract" onclick="filterCategory('Contract')">💼 Contract</div>
-        <div class="chip" data-cat="Data Analytics" onclick="filterCategory('Data Analytics')">📊 Data Analytics</div>
         <div class="chip" data-cat="Applied" onclick="filterCategory('Applied')">✅ Applied Only</div>
       </div>
     </div>

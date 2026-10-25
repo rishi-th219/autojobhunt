@@ -105,17 +105,19 @@ def main():
     parser.add_argument("--auto-apply", type=int, nargs="?", const=5, help="Headlessly auto-apply to top N ATS jobs (default: 5)")
     parser.add_argument("--autonomous", action="store_true", help="Run 100% autonomous end-to-end pipeline (discover + clean + apply)")
     parser.add_argument("--stats", action="store_true", help="Show current pipeline numbers")
+    parser.add_argument("--dashboard", "--ui", action="store_true", help="Launch the local 1-click Auto-Apply browser dashboard")
     args = parser.parse_args()
 
     # Default if no arguments provided: show help and stats
     has_action = any([
         args.apis, args.jobspy, args.crawl4ai, args.naukri, args.startups,
         args.all, args.clean_dead, args.autofill, args.tailor_apply, getattr(args, "ats_full", False),
-        args.sync, args.stats, args.auto_apply is not None, args.autonomous
+        args.sync, args.stats, args.auto_apply is not None, args.autonomous, args.dashboard
     ])
     if not has_action:
         show_stats()
         print("\nCommands:")
+        print("  python job_pipeline.py --dashboard     # Launch 1-click browser dashboard (http://localhost:5000)")
         print("  python job_pipeline.py --autonomous    # 100% Hands-off: discover, clean, apply, and track")
         print("  python job_pipeline.py --tailor-apply 1 # Tailor answers, pre-fill form, and review before submit")
         print("  python job_pipeline.py --auto-apply 5  # Headlessly auto-apply to top 5 verified ATS jobs")
@@ -127,6 +129,10 @@ def main():
         print("  python job_pipeline.py --startups      # Hacker News 'Who is Hiring?' & YC directory")
         print("  python job_pipeline.py --clean-dead    # Scan and archive closed/expired job links")
         print("  python job_pipeline.py --sync          # Rebuild and style opportunities.xlsx")
+        return
+
+    if args.dashboard:
+        run_cmd([PYTHON_BIN, "web_dashboard.py"], "Launching Career-Ops Browser Dashboard")
         return
 
     if args.autonomous:

@@ -108,6 +108,14 @@ def get_candidate_profile():
         if val and not val.startswith("http"):
             cand[url_key] = f"https://{val}"
 
+    # Format phone with country code
+    if "phone" in cand and cand["phone"]:
+        raw_digits = re.sub(r"\D", "", str(cand["phone"]))
+        if len(raw_digits) == 10:
+            cand["phone_with_code"] = f"+91{raw_digits}"
+        elif len(raw_digits) > 10:
+            cand["phone_with_code"] = f"+{raw_digits}"
+
     return cand
 
 def get_targeting_config():

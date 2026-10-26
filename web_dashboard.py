@@ -17,6 +17,7 @@ import urllib.parse
 import subprocess
 import threading
 import webbrowser
+import config_loader
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 from datetime import datetime
@@ -297,6 +298,23 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self.send_header("Content-Length", str(len(html_bytes)))
             self.end_headers()
             self.wfile.write(html_bytes)
+        elif path == "/api/profile":
+            cand = config_loader.get_candidate_profile()
+            self.send_json(cand)
+        elif path == "/autofill.js":
+            js_path = os.path.join(PROJECT_ROOT, "autofill.js")
+            if os.path.exists(js_path):
+                with open(js_path, "rb") as f:
+                    js_bytes = f.read()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/javascript; charset=utf-8")
+                self.send_header("Content-Length", str(len(js_bytes)))
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.end_headers()
+                self.wfile.write(js_bytes)
+            else:
+                self.send_response(404)
+                self.end_headers()
         elif path == "/api/opportunities":
             opps = load_opportunities_data()
             self.send_json(opps)
@@ -324,22 +342,28 @@ class DashboardHandler(BaseHTTPRequestHandler):
 
         if path == "/api/apply":
             row_id = payload.get("row")
+            launch_standalone = payload.get("standalone", False)
             if not row_id:
                 self.send_json({"error": "Missing row id"}, 400)
                 return
             
-            # Look up company and role for confirmation message
+            # Look up company and role
             opps = load_opportunities_data()
             target = next((o for o in opps if o["id"] == int(row_id)), None)
             comp = target["company"] if target else "Company"
             role = target["role"] if target else "Role"
+            target_url = target["url"] if target else ""
 
-            # Launch Playwright autofill assistant
-            threading.Thread(target=run_apply_worker, args=(row_id,), daemon=True).start()
+            # Only spawn standalone Chromium if explicitly requested
+            if launch_standalone:
+                threading.Thread(target=run_apply_worker, args=(row_id,), daemon=True).start()
             
             self.send_json({
-                "status": "launched",
-                "message": f"Opening Chromium assistant for #{row_id}: {comp} — {role}. Check your screen!"
+                "status": "ok",
+                "url": target_url,
+                "company": comp,
+                "role": role,
+                "message": f"Target for #{row_id}: {comp} — {role}"
             })
 
         elif path == "/api/scan":
@@ -499,6 +523,65 @@ HTML_CONTENT = """<!DOCTYPE html>
     .btn-emerald:hover {
       background: linear-gradient(135deg, #047857, #059669);
       transform: translateY(-1px);
+    }
+
+    /* Logged-in Browser Banner */
+    .session-browser-banner {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.12), rgba(59, 130, 246, 0.12));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 12px;
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .banner-left {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      line-height: 1.4;
+    }
+    .banner-left strong {
+      color: #10b981;
+    }
+    .banner-right {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      flex-shrink: 0;
+    }
+    .btn-bookmarklet {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: #10b981;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 0.82rem;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: grab;
+      box-shadow: 0 2px 12px rgba(16, 185, 129, 0.35);
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+    .btn-bookmarklet:hover {
+      background: #34d399;
+      transform: translateY(-1px);
+    }
+    .btn-guide {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .btn-guide:hover {
+      color: #ffffff;
     }
 
     /* Main Container */
@@ -919,6 +1002,24 @@ HTML_CONTENT = """<!DOCTYPE html>
 
   <!-- Main Content Area -->
   <main>
+    <!-- Logged-in Browser Session Banner -->
+    <div class="session-browser-banner">
+      <div class="banner-left">
+        <span style="font-size: 1.3rem;">🔒</span>
+        <div>
+          <strong>Using Your Active Logged-in Browser Session:</strong> Postings open directly in tabs in this browser so your existing logins (LinkedIn, Naukri, Workday) remain active.
+        </div>
+      </div>
+      <div class="banner-right">
+        <a href="javascript:(function(){var s=document.createElement('script');s.src='http://127.0.0.1:5000/autofill.js?t='+Date.now();document.body.appendChild(s);})();" 
+           class="btn-bookmarklet" 
+           title="Drag this button to your browser Bookmarks Bar!">
+          ⭐ Drag to Bookmarks: ⚡ AutoFill
+        </a>
+        <span class="btn-guide" onclick="showExtensionModal()">Extension / Guide</span>
+      </div>
+    </div>
+
     <!-- Summary Metrics Grid -->
     <div class="metrics-grid">
       <div class="metric-card active-filter" onclick="filterCategory('All')">
@@ -1158,7 +1259,7 @@ HTML_CONTENT = """<!DOCTYPE html>
             </td>
             <td style="text-align: right;">
               <div class="action-group" style="justify-content: flex-end;">
-                <button class="btn-apply-fast" onclick="launchAutoApply(${o.id}, '${escapeJs(o.company)}', '${escapeJs(o.role)}')">
+                <button class="btn-apply-fast" onclick="launchAutoApply(${o.id}, '${escapeJs(o.company)}', '${escapeJs(o.role)}', '${escapeJs(o.url)}')">
                   ⚡ Auto-Apply
                 </button>
                 <a href="${escapeHtml(o.url)}" target="_blank" class="btn-icon-sm" title="Open Posting">
@@ -1180,21 +1281,21 @@ HTML_CONTENT = """<!DOCTYPE html>
       document.getElementById('next-btn').disabled = end >= filteredList.length;
     }
 
-    async function launchAutoApply(rowId, company, role) {
-      showToast(`🚀 Opening Chromium Assistant for #${rowId} (${company})... Look at your screen!`);
-      try {
-        const res = await fetch('/api/apply', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ row: rowId })
-        });
-        const data = await res.json();
-        if (data.status === 'launched') {
-          showToast(`⚡ Browser opened! Review tailored answers and hit submit.`);
-        }
-      } catch (err) {
-        showToast('⚠️ Error launching autofill: ' + err.message);
+    function launchAutoApply(rowId, company, role, url) {
+      if (!url || url === '#' || !url.startsWith('http')) {
+        showToast('⚠️ No direct apply URL available for this role.');
+        return;
       }
+      // Open in current browser tab with user's active logins
+      window.open(url, '_blank');
+      showToast(`⚡ Opened ${company} in a new tab! Click your ⚡ AutoFill bookmarklet (or use extension) to autofill.`);
+    }
+
+    function showExtensionModal() {
+      document.getElementById('guide-modal').style.display = 'flex';
+    }
+    function closeExtensionModal() {
+      document.getElementById('guide-modal').style.display = 'none';
     }
 
     async function markApplied(company, role, url, id) {
@@ -1298,6 +1399,45 @@ HTML_CONTENT = """<!DOCTYPE html>
       loadOpportunities();
     });
   </script>
+
+  <!-- Extension & Bookmarklet Setup Modal -->
+  <div id="guide-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:999999; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+    <div style="background:#111827; border:1px solid #374151; border-radius:14px; max-width:540px; width:92%; padding:24px; box-shadow:0 25px 50px rgba(0,0,0,0.6);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 style="color:#10b981; margin:0; font-size:17px; display:flex; align-items:center; gap:8px;">
+          <span>⚡</span> In-Browser 1-Click AutoFill Guide
+        </h3>
+        <button onclick="closeExtensionModal()" style="background:transparent; border:none; color:#94a3b8; font-size:20px; cursor:pointer;">✕</button>
+      </div>
+
+      <p style="font-size:13px; color:#cbd5e1; line-height:1.5; margin:0 0 14px 0;">
+        Instead of opening separate empty browsers, the bot now runs <strong>directly inside this browser window</strong> so your existing logins (LinkedIn, Naukri, Workday) are active.
+      </p>
+
+      <div style="background:#1e293b; border-radius:10px; padding:14px; margin-bottom:12px; border:1px solid #334155;">
+        <strong style="color:#38bdf8; font-size:13px;">Method 1: Bookmarklet (Instant, Zero Setup)</strong>
+        <p style="font-size:12px; color:#94a3b8; margin:6px 0 0 0; line-height:1.5;">
+          1. Drag the green <strong>[⭐ Drag to Bookmarks: ⚡ AutoFill]</strong> button from the top banner to your browser Bookmarks Bar.<br>
+          2. Click <strong>⚡ Auto-Apply</strong> on any job in this dashboard to open it in a new tab.<br>
+          3. On that tab, click your <strong>⚡ AutoFill</strong> bookmark. All candidate details, links, and screening questions will be filled instantly!
+        </p>
+      </div>
+
+      <div style="background:#1e293b; border-radius:10px; padding:14px; margin-bottom:18px; border:1px solid #334155;">
+        <strong style="color:#38bdf8; font-size:13px;">Method 2: AutoJobHunt Extension (Hands-Free)</strong>
+        <p style="font-size:12px; color:#94a3b8; margin:6px 0 0 0; line-height:1.5;">
+          1. In this browser, open <code>brave://extensions</code> (or <code>chrome://extensions</code>).<br>
+          2. Toggle <strong>Developer mode</strong> (top right) ON.<br>
+          3. Click <strong>Load unpacked</strong> and select the <code>extension</code> folder in this repo.<br>
+          4. Done! Every job page will now automatically show the ⚡ AutoFill button.
+        </p>
+      </div>
+
+      <button onclick="closeExtensionModal()" class="btn btn-primary" style="width:100%; justify-content:center; padding:10px; font-size:13px;">
+        Got it, thanks!
+      </button>
+    </div>
+  </div>
 </body>
 </html>
 """

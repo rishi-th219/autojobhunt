@@ -319,11 +319,28 @@ def run_assistant(target_arg):
     print("Launching Chromium headed browser...")
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
-        context = browser.new_context(
-            viewport={"width": 1280, "height": 900},
-            user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-        )
+        # 1. Attempt to connect to an existing running browser via CDP (port 9222)
+        context = None
+        browser = None
+        try:
+            browser = p.chromium.connect_over_cdp("http://127.0.0.1:9222", timeout=2000)
+            context = browser.contexts[0] if browser.contexts else browser.new_context()
+            print("✓ Connected to your active browser session via CDP (port 9222)!")
+        except Exception:
+            pass
+
+        # 2. If no active CDP session, launch persistent context so logins/cookies are preserved
+        if context is None:
+            profile_dir = os.path.expanduser("~/.config/autojobhunt-browser-profile")
+            os.makedirs(profile_dir, exist_ok=True)
+            print(f"Using persistent browser profile (cookies & logins preserved across sessions): {profile_dir}")
+            context = p.chromium.launch_persistent_context(
+                user_data_dir=profile_dir,
+                headless=False,
+                viewport={"width": 1280, "height": 900},
+                user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+            )
+        
         page = context.new_page()
 
         print(f"Navigating to {url}...")
@@ -372,7 +389,13 @@ def run_assistant(target_arg):
         except (KeyboardInterrupt, EOFError):
             pass
 
-        browser.close()
+        try:
+            if context:
+                context.close()
+            elif browser:
+                browser.close()
+        except Exception:
+            pass
         print("Browser session closed.")
 
 if __name__ == "__main__":

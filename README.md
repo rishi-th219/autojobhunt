@@ -5,7 +5,7 @@
 
 > **Lineage & Attribution:** Based on [career-ops](https://github.com/career-ops-hq/career-ops) by [Santiago Fernández de Valderrama (santifer)](https://github.com/santifer) under the MIT License.
 
-[![GitHub Repo](https://img.shields.io/badge/GitHub-autojobhunt-blue?logo=github)](https://github.com/rishi-th219/career-ops-bot)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-autojobhunt-blue?logo=github)](https://github.com/rishi-th219/autojobhunt)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-brightgreen?logo=python)](https://python.org)
 [![Playwright](https://img.shields.io/badge/Playwright-Automated%20Apply-orange?logo=playwright)](https://playwright.dev)
 [![Upstream](https://img.shields.io/badge/Based%20On-career--ops-blueviolet)](https://github.com/career-ops-hq/career-ops)
@@ -53,8 +53,8 @@ Anyone can fork this repository and run their own autonomous job hunting pipelin
 ### 1. Fork & Clone
 Click the **Fork** button at the top right of this repository, then clone your fork:
 ```bash
-git clone https://github.com/<your-username>/career-ops-bot.git
-cd career-ops-bot
+git clone https://github.com/<your-username>/autojobhunt.git
+cd autojobhunt
 ```
 
 ### 2. Setup Python Environment

@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "AutoJobHunt In-Browser Assistant",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Autofills job applications directly inside your current logged-in browser session (Brave/Chrome).",
-  "permissions": ["activeTab", "storage"],
+  "permissions": ["activeTab", "storage", "scripting"],
   "host_permissions": [
     "http://127.0.0.1:5000/*",
     "http://localhost:5000/*",
@@ -11,24 +11,24 @@
   ],
   "action": {
     "default_title": "AutoJobHunt Auto-Fill",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   },
   "content_scripts": [
     {
-      "matches": [
-        "*://*.greenhouse.io/*",
-        "*://*.lever.co/*",
-        "*://*.ashbyhq.com/*",
-        "*://*.smartrecruiters.com/*",
-        "*://*.myworkdayjobs.com/*",
-        "*://*.workday.com/*",
-        "*://*.naukri.com/*",
-        "*://*.instahyre.com/*",
-        "*://*.linkedin.com/*",
-        "*://*.indeed.com/*"
-      ],
+      "matches": ["<all_urls>"],
       "js": ["content.js"],
-      "run_at": "document_idle"
+      "run_at": "document_idle",
+      "all_frames": true
     }
   ]
 }

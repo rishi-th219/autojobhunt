@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# launch_dashboard.sh — 1-Click Launcher for Career-Ops Browser Dashboard
+# launch_dashboard.sh — 1-Click Launcher for AutoJobHunt Browser Dashboard (based on career-ops)
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR"
@@ -12,7 +12,7 @@ else
 fi
 
 echo "=========================================================="
-echo "⚡ Starting Career-Ops Auto-Apply Dashboard..."
+echo "⚡ Starting AutoJobHunt Dashboard (based on career-ops)..."
 echo "🌐 URL: http://localhost:5000"
 echo "=========================================================="
 

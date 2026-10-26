@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-web_dashboard.py — Localhost Browser Dashboard for Career-Ops
+web_dashboard.py — Localhost Browser Dashboard for AutoJobHunt (based on career-ops)
 Lists all opportunities from opportunities.xlsx / opportunities.csv and enables
 1-click tailored auto-fill applications and background job scanning from the browser.
 
@@ -373,7 +373,7 @@ HTML_CONTENT = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Career-Ops • 1-Click Auto-Apply Dashboard</title>
+  <title>AutoJobHunt • 1-Click Auto-Apply Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -888,8 +888,8 @@ HTML_CONTENT = """<!DOCTYPE html>
     <div class="brand">
       <div class="brand-icon">⚡</div>
       <div>
-        <h1>Career-Ops Dashboard</h1>
-        <p>1-Click Playwright Auto-Apply & Job Pipeline Command Center</p>
+        <h1>AutoJobHunt Dashboard</h1>
+        <p>1-Click Playwright Auto-Apply & Job Pipeline Command Center (based on career-ops)</p>
       </div>
     </div>
 
@@ -1323,7 +1323,7 @@ def main():
 
     url = f"http://127.0.0.1:{port}"
     print("=" * 65)
-    print(f"⚡ Career-Ops 1-Click Auto-Apply Dashboard running at: {url}")
+    print(f"⚡ AutoJobHunt 1-Click Auto-Apply Dashboard (based on career-ops) running at: {url}")
     print(f"📊 Serving 600+ opportunities from: {OPPORTUNITIES_CSV}")
     print("🚀 Opening dashboard in your default browser...")
     print("   Press Ctrl+C in this terminal to stop the server.")
@@ -1335,7 +1335,7 @@ def main():
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print("\nShutting down Career-Ops Dashboard server. Goodbye!")
+        print("\nShutting down AutoJobHunt Dashboard server. Goodbye!")
         server.shutdown()
 
 if __name__ == "__main__":

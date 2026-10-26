@@ -1,47 +1,24 @@
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/wordmark-dark.svg"><img src="docs/wordmark-light.svg" alt="career-ops" width="250" height="56"></picture></p>
-
-<p align="center">The open-source AI job search agent.</p>
-
-<p align="center">
-  <a href="README.md">English</a> |
-  <a href="README.es.md">Español</a> |
-  <a href="README.de.md">Deutsch</a> |
-  <a href="README.fr.md">Français</a> |
-  <a href="README.pt-BR.md">Português (Brasil)</a> |
-  <a href="README.ko-KR.md">한국어</a> |
-  <a href="README.ja.md">日本語</a> |
-  <a href="README.cn.md">简体中文</a> |
-  <a href="README.zh-TW.md">繁體中文</a> |
-  <a href="README.ua.md">Українська</a> |
-  <a href="README.ru.md">Русский</a> |
-  <a href="README.pl.md">Polski</a> |
-  <a href="README.da.md">Dansk</a> |
-  <a href="README.ta.md">தமிழ்</a> |
-  <a href="README.ar.md">العربية</a> |
-  <a href="README.hi.md">हिन्दी</a> |
-  <a href="README.tr.md">Türkçe</a> |
-  <a href="README.vi.md">Tiếng Việt</a>
-</p>
-
 <div align="center">
 
-# 🚀 Career-Ops: Autonomous Bot Edition
-### The Open-Source AI Job Search Agent — Supercharged with Autonomous Python Discovery & Headless Auto-Apply
+# 🚀 AutoJobHunt
+### Open-Source Autonomous Job Discovery & 1-Click Auto-Apply Dashboard
 
-[![GitHub Repo](https://img.shields.io/badge/GitHub-career--ops--bot-blue?logo=github)](https://github.com/rishi-th219/career-ops-bot)
+> **Lineage & Attribution:** Based on [career-ops](https://github.com/career-ops-hq/career-ops) by [Santiago Fernández de Valderrama (santifer)](https://github.com/santifer) under the MIT License.
+
+[![GitHub Repo](https://img.shields.io/badge/GitHub-autojobhunt-blue?logo=github)](https://github.com/rishi-th219/career-ops-bot)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-brightgreen?logo=python)](https://python.org)
 [![Playwright](https://img.shields.io/badge/Playwright-Automated%20Apply-orange?logo=playwright)](https://playwright.dev)
-[![Upstream](https://img.shields.io/badge/Forked%20From-career--ops-blueviolet)](https://github.com/career-ops-hq/career-ops)
+[![Upstream](https://img.shields.io/badge/Based%20On-career--ops-blueviolet)](https://github.com/career-ops-hq/career-ops)
 
 </div>
 
 ---
 
-## 🌟 About This Enhanced Fork
+## 🌟 About AutoJobHunt
 
-This repository is an **autonomous extension of [career-ops](https://github.com/career-ops-hq/career-ops)** (originally created by [santifer](https://github.com/santifer)).
+This project is an **autonomous job search and application extension based on [career-ops](https://github.com/career-ops-hq/career-ops)** (originally created by [santifer](https://github.com/santifer)).
 
-While upstream `career-ops` gives you a powerful LLM agent for evaluating postings, tailoring CVs, and tracking pipeline stages, this fork adds an **autonomous Python automation layer** designed for hands-off job acquisition:
+While upstream `career-ops` gives you a powerful LLM agent for evaluating postings, tailoring CVs, and tracking pipeline stages, **AutoJobHunt** adds an **autonomous Python automation layer** and a **localhost browser dashboard** designed for streamlined job acquisition:
 
 - ⚡ **8-Channel Multi-Portal Job Discovery**:
   - Direct ATS APIs: Greenhouse, Lever, Ashby, SmartRecruiters (zero LLM token cost).
@@ -126,149 +103,16 @@ python job_pipeline.py --autonomous
 
 ---
 
-## 🏛️ Original Career-Ops System (Upstream)
+## 🏛️ Upstream Foundation (career-ops)
 
-Below is the original documentation from the upstream [career-ops](https://github.com/career-ops-hq/career-ops) project by [santifer](https://github.com/santifer), which powers the LLM evaluation and report generation modes.
+AutoJobHunt is an autonomous extension built on top of [career-ops](https://github.com/career-ops-hq/career-ops), originally created by [Santiago Fernández de Valderrama (santifer)](https://github.com/santifer) under the MIT License.
 
----
+### Upstream Principles vs. AutoJobHunt
 
-<!-- The non-breaking spaces (&nbsp;) and word joiners (&#8288;) below decide where each line wraps on a phone. Keep them when editing. -->
+- **Upstream career-ops**: An AI coding CLI suite focused on deep job evaluation (Blocks A–H), grounded CV tailoring, interview preparation (STAR+R story bank), and salary negotiation assistance. Upstream operates under a strict human-in-the-loop philosophy where the system evaluates and drafts, leaving the final submission decision to you.
+- **AutoJobHunt (This Project)**: An autonomous application and discovery layer built on top of that framework. It adds multi-channel job scraping (Greenhouse, Lever, Ashby, SmartRecruiters, Naukri, Instahyre, remote portals), link liveness auditing, a local web dashboard (`localhost:5000`), and automated form autofill with optional headless submission.
 
-<p align="center"><a href="https://github.com/santifer"><img src="docs/avatar-santifer.png" width="48" height="48" align="middle" alt="Santiago Fernández de Valderrama Aparicio"></a>&nbsp;&nbsp;<a href="https://github.com/santifer"><strong>santifer</strong></a></p>
-
-<p align="center">
-<strong>Months of sending CVs into&nbsp;silence.</strong><br>
-So I built the filter I&nbsp;needed.
-</p>
-
-<p align="center">
-<strong>740&nbsp;listings&nbsp;evaluated. 68&nbsp;applied. 12&nbsp;interviews.&nbsp;1&nbsp;offer.</strong><br>
-I was its first user. I got the&nbsp;job. Then&nbsp;I&nbsp;open-&#8288;sourced&nbsp;it.
-</p>
-
-<p align="center">
-Paste a job. On your machine, it tells you if it's still&nbsp;open and if it&nbsp;fits.<br>
-It tailors your CV and drafts your&nbsp;answers. <strong>You&nbsp;press&nbsp;Submit.</strong>
-</p>
-
-<p align="center">
-  <img src="docs/demo.gif" alt="The author's own search in the career-ops dashboard: scored listings, a red count of the ones marked do not apply, then a full evaluation report" width="800">
-</p>
-
-<p align="center"><sub>My own search, partway through, with&nbsp;the&nbsp;UI&nbsp;in&nbsp;Spanish.</sub></p>
-
-<p align="center">
-  Companies use AI to filter candidates.<br>
-  <strong>I just gave candidates AI&nbsp;to&nbsp;<em>choose</em>&nbsp;companies.</strong>
-</p>
-
-<p align="center">
-  Six months later, <strong>I left that job.</strong><br>
-  Now we build career-ops, so&nbsp;you&nbsp;can&nbsp;land&nbsp;yours.
-</p>
-
-<p align="center"><a href="#your-turn">Try it on one job&nbsp;↓</a> · <a href="https://santifer.io/career-ops-system">Read the full&nbsp;story&nbsp;→</a></p>
-
-<br>
-
-<p align="center"><a href="HIRED.md"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fcareer-ops-hq%2Fcareer-ops%2Fmain%2Fdocs%2Fhired-count.json&query=%24.count&label=%F0%9F%8E%89%20HIRED%20WITH%20CAREER-OPS&suffix=%20on%20the%20record&color=2ea44f&style=for-the-badge&labelColor=2b3137" alt="Hired with career-ops: public stories on the record"></a></p>
-
-<p align="center">The people who came after me wrote down how they got hired.</p>
-
-<p align="center">
-  <a href="HIRED.md"><img src="docs/hired-wall.svg" alt="Hired stories you can open and read" width="800"></a>
-</p>
-
-<p align="center"><sub>Every card is a public issue you can open. Landed yours? <a href="https://github.com/career-ops-hq/career-ops/issues/new?template=i-got-hired.yml">Leave your card →</a></sub></p>
-
-<p align="center">⭐ <strong>If career-ops helped you, a star helps the next person find&nbsp;it.</strong></p>
-
-<br>
-
-<p align="center">
-  <a href="https://wired.com.gr/article/to-ai-ergaleio-pou-fernei-epanastasi-ston-tropo-pou-psachnoume-douleia/" rel="noopener noreferrer nofollow"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/press/wired-dark.svg"><img src="docs/press/wired.svg" alt="WIRED" height="32"></picture></a>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://www.businessinsider.com/how-i-built-tool-filter-job-listings-landed-head-ai-2026-4" rel="noopener noreferrer nofollow"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/press/business-insider-dark.svg"><img src="docs/press/business-insider.svg" alt="Business Insider" height="32"></picture></a>
-</p>
-
-<p align="center">
-  <a href="https://vercel.com/open-source-program"><img alt="Vercel OSS Program" src="https://vercel.com/oss/program-badge-2026.svg" height="32"></a>
-</p>
-
-<p align="center">
-  <a href="https://trendshift.io/repositories/25195" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/25195" alt="GitHub Trending: #1 repository of the day (Trendshift)" width="250" height="55"></a>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://www.producthunt.com/products/santifer-io?utm_source=badge-featured&utm_medium=badge" rel="noopener noreferrer"><img src="docs/press/producthunt.svg" alt="Featured on Product Hunt" width="206" height="54"></a>
-</p>
-
-## Your turn
-
-Paste one job you were about to apply to tonight. If it comes back <em>do not apply</em>, you just got the night back. If it comes back with a plan, you know what to do next.
-
-```bash
-npx @santifer/career-ops init
-```
-
-<p align="center"><sub>Open source. Local. In the AI CLI you already use. <a href="docs/RUNNING_ON_A_BUDGET.md">Free and local models included.</a></sub></p>
-
-
-## You don't have to search alone
-
-The silence after you hit send is not about you. Enough people saw the same thing to write the practice down, in six lines:
-
-> Apply better to fewer. Signal over volume. Evidence over keywords. A human decides. Local-first. Dignity on both sides of the table.
-
-<p align="center"><a href="https://career-ops.org/manifesto?utm_source=readme"><img src="https://img.shields.io/badge/dynamic/regex?url=https%3A%2F%2Fraw.githubusercontent.com%2Fcareer-ops-hq%2Fcareer-ops%2Fmain%2FSIGNATURES.md&search=n%3A(%5Cd%2B)%5Cs*%24&replace=%241%20signatories&label=THE%20CAREEROPS%20MANIFESTO&color=DD7627&style=for-the-badge&labelColor=2b3137" alt="The CareerOps manifesto: live count of signatories"></a></p>
-
-<p align="center">A few of them, in their own words.</p>
-
-<p align="center">
-  <a href="https://career-ops.org/manifesto?utm_source=readme"><img src="docs/manifesto-wall.svg" alt="Three signatures of the CareerOps manifesto, in their own words" width="800"></a>
-</p>
-
-<p align="center"><sub>Every signature is a commit you can audit. <a href="https://career-ops.org/manifesto?utm_source=readme">Read them all, or add yours →</a></sub></p>
-
-<br>
-
-Hiring will not fix itself. The people going through it can, and they are already in the room, comparing notes and fixing each other's setups. [This is where the fix gets written](CONTRIBUTING.md). A room, not a club. **Let's build together.**
-
-<p align="center"><a href="https://discord.gg/8pRpHETxa4"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Fv10%2Finvites%2F8pRpHETxa4%3Fwith_counts%3Dtrue&query=%24.approximate_member_count&label=Discord&suffix=%20members&color=5865F2&style=for-the-badge&labelColor=2b3137&logo=discord&logoColor=white" alt="Discord: live member count of the career-ops server"></a></p>
-
-## Sponsors
-
-career-ops is free for candidates, forever. These companies sponsor the project:
-
-<p align="center">
-  <a href="https://serpapi.com/career-ops-org" title="SerpApi"><img src="docs/sponsors/serpapi.svg" alt="SerpApi" height="48"></a>
-</p>
-
-<p align="center"><strong>SerpApi</strong> · Build a portfolio project with live search data. SerpApi gives developers structured JSON/Markdown from Google Search, Maps, Shopping, and other engines through a simple API call.</p>
-
-> Sponsorship buys clearly labeled visibility, never influence: no amount of money changes the roadmap or places anything in the product. Sponsors never appear in evaluations, rankings or recommendations.
-
-## What career-ops does for you
-
-Paste a job. It tells you whether that night is worth it.
-
-- **Still open?** It checks that the posting is still live before you write a word.
-- **Not you?** It scores the role against your real CV and tells you to skip a weak fit. You can override it.
-- **Worth it?** It drafts the CV, the cover letter and the answers. You read them. You send them.
-- **Who do I talk to?** It finds the person and drafts the note. It never sends it.
-- **Where does it all go?** Every application stays on your machine. Nothing is uploaded to us.
-- **What should I learn?** After a run of noes, it names the gap.
-
-The first runs are rough. It does not know you yet. Talk to it: your CV, what you want, what you refuse. Think of it as a recruiter's first week.
-
-On first launch it asks for all that in chat. Nothing to configure by hand.
-
-## What career-ops will not do
-
-- **Auto-submit an application.** It drafts the answer to every field; you review and click Submit. The script never POSTs (`prepare-application.mjs`).
-- **Send an email.** Drafts only. There is no mail transport anywhere in this codebase.
-- **Phone home.** No telemetry, no backend of ours. Your CV goes from your machine to the AI provider you chose, and nowhere else. The only public ledger is this repo: `HIRED.md` and its issues.
-- **Push you to apply below 4.0/5.** It will tell you not to. You can override it, and it will say so.
-
-It reformulates your CV; it must never fabricate it. A check in code stops a PDF whose numbers or facts appear in neither your CV nor your article digest, but it cannot judge every rewording yet. Read every CV before you send it. Details in the [FAQ](#faq).
+If you are looking for the original human-in-the-loop AI job search CLI, please visit the upstream repository at [career-ops-hq/career-ops](https://github.com/career-ops-hq/career-ops).
 
 ## Features
 

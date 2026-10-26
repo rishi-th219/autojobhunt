@@ -1,4 +1,6 @@
-# 🚀 Autonomous Job Hunting & Auto-Apply Bot
+# 🚀 AutoJobHunt: Autonomous Job Hunting & Auto-Apply Pipeline
+
+> **Lineage & Attribution:** Based on [career-ops](https://github.com/career-ops-hq/career-ops) by [Santiago Fernández de Valderrama (santifer)](https://github.com/santifer) under the MIT License.
 
 An end-to-end, zero-manual-intervention Python job acquisition pipeline. Automatically discovers verified tech opportunities across direct ATS APIs, web portals, startup talent networks, audits link liveness, compiles styled Excel spreadsheets, and autonomously submits applications using headless Playwright.
 
@@ -47,8 +49,8 @@ An end-to-end, zero-manual-intervention Python job acquisition pipeline. Automat
 ### 2. Installation
 ```bash
 # Clone the repository
-git clone https://github.com/rishi-th219/career-ops-bot.git
-cd career-ops-bot
+git clone https://github.com/<your-username>/autojobhunt.git
+cd autojobhunt
 
 # Create and activate virtual environment
 python3 -m venv .venv
@@ -143,4 +145,4 @@ crontab -l
 ---
 
 ## 📄 License
-MIT License. Open-source and customizable for your personal career operations.
+MIT License. Based on [career-ops](https://github.com/career-ops-hq/career-ops) by [Santiago Fernández de Valderrama (santifer)](https://github.com/santifer).

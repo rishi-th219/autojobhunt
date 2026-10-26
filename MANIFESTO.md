@@ -65,4 +65,4 @@ CareerOps, the name of the practice, belongs to everyone who practices it. caree
 **Signed:**
 Santiago Fernández de Valderrama Aparicio (santifer), creator of career-ops. July 14, 2026
 
-Signed by the community → [SIGNATURES.md](./SIGNATURES.md)
+Signed by the community → [SIGNATURES.md](https://github.com/career-ops-hq/career-ops/blob/main/SIGNATURES.md)

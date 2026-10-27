@@ -138,7 +138,12 @@ POSITIVE_KEYWORDS = [
     "r&d intern",
     "ai research intern",
     "contract",
-    "contractor"
+    "contractor",
+    "supply chain analyst",
+    "inventory analyst",
+    "materials planner",
+    "logistics analyst",
+    "supply chain specialist"
 ]
 
 NEGATIVE_KEYWORDS = [

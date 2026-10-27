@@ -29,9 +29,11 @@ PIPELINE_FILE = os.path.join(PROJECT_ROOT, "data", "pipeline.md")
 APPLICATIONS_FILE = os.path.join(PROJECT_ROOT, "data", "applications.md")
 STATUS_LOG_FILE = os.path.join(PROJECT_ROOT, "data", "status-log.tsv")
 
-PYTHON_BIN = os.path.join(PROJECT_ROOT, ".venv", "bin", "python")
-if not os.path.exists(PYTHON_BIN):
-    PYTHON_BIN = sys.executable
+candidate_bins = [
+    os.path.join(PROJECT_ROOT, ".venv", "Scripts", "python.exe"),
+    os.path.join(PROJECT_ROOT, ".venv", "bin", "python"),
+]
+PYTHON_BIN = next((p for p in candidate_bins if os.path.exists(p)), sys.executable)
 
 # Global state for background scans and applications
 ACTIVE_SCAN = {

@@ -239,8 +239,7 @@ output/confirmations/
 output/skipped/
 *.log
 
-# Personal Session & Handover Notes
-HANDOVER.md
+# Personal Session Notes
 MEMORY.md
 config/corrections.json
 generate_resume_docx.py

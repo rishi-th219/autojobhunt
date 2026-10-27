@@ -194,6 +194,7 @@ def get_tailored_resume_filename(role_title=None):
 
     matches = []
     tracks = [
+        ("SupplyChain", r'\b(supply\s*chain|inventory|materials?\s*plan\w*|logistics|procurement|demand\s*plan\w*|pfep|sc\s*analyst)\b', f"{prefix}Supply_Chain_Analyst_Resume.pdf"),
         ("AIML", r'\b(machine\s+learning|ml\b|artificial\s+intelligence|ai\b|data\s+scientist|data\s+science|deep\s+learning|computer\s+vision|nlp|genai|generative\s+ai|llm|research)\b', f"{prefix}AI_ML_Resume.pdf"),
         ("Python", r'\b(python|fastapi|flask|django|backend|api\s+developer|backend\s+engineer|software\s+engineer|sde)\b', f"{prefix}Python_Developer_Resume.pdf"),
         ("PowerBI", r'\b(power\s*bi|powerbi|power-bi|tableau|looker|oac|bi\s+developer|bi\s+engineer|bi\s+analyst|business\s+intelligence|dashboard|reporting)\b', f"{prefix}PowerBI_Developer_Resume.pdf"),
@@ -242,7 +243,7 @@ def find_resume_file(role_title=None):
                     return candidate_path
 
             # Fuzzy match track keyword in directory if candidate prefix differs
-            track_keywords = ["AI_ML", "Python", "PowerBI", "SQL", "Business_Analyst", "Data_Analyst"]
+            track_keywords = ["Supply_Chain", "AI_ML", "Python", "PowerBI", "SQL", "Business_Analyst", "Data_Analyst"]
             matched_track = next((tk for tk in track_keywords if tk.lower() in base_name.lower()), None)
             if matched_track:
                 try:

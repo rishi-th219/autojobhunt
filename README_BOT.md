@@ -114,7 +114,53 @@ python job_pipeline.py --tailor-apply 5
 
 # 10. Quick Form Autofill Assistant for a specific URL or row #
 python job_pipeline.py --autofill "https://jobs.lever.co/company/job-id"
+
+# 11. Continuous 24/7 Background Daemon (Scans periodically & sends instant email alerts)
+python job_pipeline.py --daemon
+
+# 12. Test Email Notification System
+python job_pipeline.py --email-test
 ```
+
+---
+
+## 📧 Email Alerts & 24/7 Background Daemon
+
+AutoJobHunt can run continuously in the background and dispatch rich HTML email alerts as soon as new jobs matching your target tracks are found.
+
+### 1. Configure Email Credentials in `.env`
+Add your SMTP credentials to `.env`:
+```ini
+EMAIL_ALERTS_ENABLED=true
+ALERT_RECIPIENT_EMAIL=rishi_th219@proton.me
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASSWORD=your_16_digit_gmail_app_password
+SMTP_USE_TLS=true
+```
+*(For Gmail, generate a 16-character App Password at [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)).*
+
+### 2. Verify Email Delivery
+```bash
+python email_notifier.py --test
+```
+
+### 3. Running the Daemon in the Background
+- **Foreground loop (interactive):**
+  ```bash
+  python background_daemon.py
+  ```
+- **Silent background execution (Windows):**
+  ```bash
+  python background_daemon.py --start
+  python background_daemon.py --status
+  python background_daemon.py --stop
+  ```
+- **Windows Task Scheduler (Auto-start at logon):**
+  ```powershell
+  .\setup_windows_task.ps1 -Install
+  ```
 
 ---
 

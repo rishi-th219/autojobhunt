@@ -12,6 +12,11 @@ deduplicating against existing pipeline and updating opportunities.xlsx.
 
 import os
 import sys
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 import re
 import json
 import html
@@ -360,6 +365,13 @@ def main():
         log("Synced new startup opportunities into opportunities.xlsx.")
     except Exception as e:
         log(f"Error syncing to opportunities.xlsx: {e}")
+
+    # Dispatch email notification alert
+    try:
+        import email_notifier
+        email_notifier.send_job_alert(new_jobs)
+    except Exception as e:
+        log(f"Email alert error: {e}")
 
     log(f"Successfully added {len(new_jobs)} startup & VC opportunities!")
     log("==================================================")

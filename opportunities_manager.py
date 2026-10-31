@@ -16,6 +16,11 @@ Also syncs opportunities.csv and can be called directly or imported by daily_job
 
 import os
 import sys
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 import csv
 import json
 import re

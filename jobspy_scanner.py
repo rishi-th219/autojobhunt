@@ -460,6 +460,13 @@ def main():
     except Exception as e:
         log(f"Error syncing to opportunities.xlsx: {e}")
 
+    # Dispatch email notification alert
+    try:
+        import email_notifier
+        email_notifier.send_job_alert(new_jobs)
+    except Exception as e:
+        log(f"Email alert error: {e}")
+
     log(f"Successfully added {len(new_jobs)} JobSpy roles to pipeline.md and scan-history.tsv.")
 
 if __name__ == "__main__":

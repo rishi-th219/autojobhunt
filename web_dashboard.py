@@ -9,6 +9,11 @@ Zero external web dependencies — runs entirely on Python standard library (htt
 
 import os
 import sys
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 import csv
 import json
 import time
@@ -326,6 +331,30 @@ class DashboardHandler(BaseHTTPRequestHandler):
         elif path == "/api/scan-status":
             with SCAN_LOCK:
                 self.send_json(ACTIVE_SCAN)
+        elif path == "/api/daemon":
+            import background_daemon
+            pid = background_daemon.get_active_daemon_pid()
+            status_file = os.path.join(PROJECT_ROOT, "data", "daemon_status.json")
+            info = {"is_running": bool(pid), "pid": pid}
+            if os.path.exists(status_file):
+                try:
+                    with open(status_file, "r", encoding="utf-8") as f:
+                        info.update(json.load(f))
+                except Exception:
+                    pass
+            self.send_json(info)
+        elif path == "/api/email/latest":
+            latest_html = os.path.join(PROJECT_ROOT, "data", "email_alerts", "latest_alert.html")
+            if os.path.exists(latest_html):
+                with open(latest_html, "rb") as f:
+                    data = f.read()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(data)))
+                self.end_headers()
+                self.wfile.write(data)
+            else:
+                self.send_json({"message": "No alerts generated yet."})
         else:
             self.send_response(404)
             self.end_headers()
@@ -389,6 +418,19 @@ class DashboardHandler(BaseHTTPRequestHandler):
             if url:
                 webbrowser.open(url)
             self.send_json({"status": "ok"})
+        elif path == "/api/daemon/start":
+            import background_daemon
+            interval = payload.get("interval", 60)
+            background_daemon.start_detached(interval)
+            self.send_json({"status": "started", "interval": interval})
+        elif path == "/api/daemon/stop":
+            import background_daemon
+            background_daemon.stop_daemon()
+            self.send_json({"status": "stopped"})
+        elif path == "/api/email/test":
+            import email_notifier
+            success, msg = email_notifier.send_test_email()
+            self.send_json({"success": success, "message": msg})
         else:
             self.send_response(404)
             self.end_headers()

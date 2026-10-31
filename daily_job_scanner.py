@@ -20,6 +20,11 @@ leads directly into data/pipeline.md and synchronizes opportunities.xlsx / oppor
 
 import os
 import sys
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 import json
 import re
 import time
@@ -679,6 +684,13 @@ def main(include_jobspy=True):
         log("✓ Successfully synchronized all opportunities into opportunities.xlsx and opportunities.csv.")
     except Exception as e:
         log(f"Error syncing to opportunities.xlsx: {e}")
+
+    # Dispatch email notification alert for newly discovered roles
+    try:
+        import email_notifier
+        email_notifier.send_job_alert(new_jobs)
+    except Exception as e:
+        log(f"Email alert error: {e}")
 
     log(f"✓ Finished! Added {len(new_jobs)} new opportunities to pipeline and tracker.")
     log("==================================================")

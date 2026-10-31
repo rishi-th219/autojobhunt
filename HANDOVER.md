@@ -323,6 +323,25 @@ node set-status.mjs "Cisco" Applied --note "Tailored Supply Chain BA resume subm
 node stats.mjs --summary
 ```
 
+### Routine 7: 24/7 Background Daemon & Email Alerts
+Run the bot continuously in the background and receive instant email notifications:
+```powershell
+# Test email connectivity
+python email_notifier.py --test
+
+# Start daemon in background (detached)
+python background_daemon.py --start
+
+# Check daemon health & next scan time
+python background_daemon.py --status
+
+# Stop background daemon
+python background_daemon.py --stop
+
+# Optional: Register in Windows Task Scheduler to auto-start on logon
+.\setup_windows_task.ps1 -Install
+```
+
 ---
 
 ## 7. Troubleshooting Windows Quirks & Common Gotchas

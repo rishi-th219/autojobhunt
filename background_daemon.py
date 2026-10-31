@@ -42,7 +42,11 @@ RUNNING = True
 def log(msg):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     formatted = f"[{timestamp}] [Daemon] {msg}"
-    print(formatted)
+    try:
+        if sys.stdout is not None:
+            print(formatted, flush=True)
+    except Exception:
+        pass
     try:
         os.makedirs(DATA_DIR, exist_ok=True)
         with open(LOG_FILE, "a", encoding="utf-8") as f:
@@ -130,6 +134,7 @@ def run_cycle():
         res = subprocess.run(
             [PYTHON_BIN, "daily_job_scanner.py", "--no-jobspy"],
             cwd=PROJECT_ROOT,
+            stdin=subprocess.DEVNULL,
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -147,6 +152,7 @@ def run_cycle():
         res_vc = subprocess.run(
             [PYTHON_BIN, "startup_vc_scanner.py"],
             cwd=PROJECT_ROOT,
+            stdin=subprocess.DEVNULL,
             capture_output=True,
             text=True,
             encoding="utf-8",
@@ -178,17 +184,22 @@ def daemon_loop(interval_minutes=60):
 
     try:
         while RUNNING:
-            last_scan = run_cycle()
-            next_scan_dt = datetime.fromtimestamp(time.time() + (interval_minutes * 60))
-            next_scan = next_scan_dt.strftime("%Y-%m-%d %H:%M:%S")
-            log(f"💤 Sleeping until next scan at: {next_scan}")
+            try:
+                last_scan = run_cycle()
+                next_scan_dt = datetime.fromtimestamp(time.time() + (interval_minutes * 60))
+                next_scan = next_scan_dt.strftime("%Y-%m-%d %H:%M:%S")
+                log(f"💤 Sleeping until next scan at: {next_scan}")
 
-            update_status(
-                is_running=True,
-                last_scan=last_scan,
-                next_scan=next_scan,
-                stats={"interval_minutes": interval_minutes}
-            )
+                update_status(
+                    is_running=True,
+                    last_scan=last_scan,
+                    next_scan=next_scan,
+                    stats={"interval_minutes": interval_minutes}
+                )
+            except Exception as loop_err:
+                import traceback
+                log(f"⚠️ Error during scan cycle: {loop_err}\n{traceback.format_exc()}")
+                update_status(is_running=True, error=str(loop_err))
 
             # Sleep in 1-second chunks to respond quickly to shutdown signals
             sleep_seconds = interval_minutes * 60

@@ -81,11 +81,25 @@ def is_pid_running(pid):
         return False
     if os.name == "nt":
         try:
-            cmd = f'tasklist /FI "PID eq {pid}" /NH'
-            out = subprocess.check_output(cmd, shell=True).decode(errors="ignore")
-            return str(pid) in out
+            import ctypes
+            from ctypes import wintypes
+            kernel32 = ctypes.windll.kernel32
+            PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
+            handle = kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, False, pid)
+            if not handle:
+                return False
+            exit_code = wintypes.DWORD()
+            success = kernel32.GetExitCodeProcess(handle, ctypes.byref(exit_code))
+            kernel32.CloseHandle(handle)
+            # STILL_ACTIVE is 259 (0x103)
+            return bool(success and exit_code.value == 259)
         except Exception:
-            return False
+            try:
+                cmd = f'tasklist /FI "PID eq {pid}" /NH'
+                out = subprocess.check_output(cmd, shell=True).decode(errors="ignore")
+                return str(pid) in out and "No tasks" not in out
+            except Exception:
+                return False
     else:
         try:
             os.kill(pid, 0)
@@ -202,25 +216,56 @@ def start_detached(interval_minutes=60):
 
     log_path = os.path.join(DATA_DIR, "daemon_stdout.log")
     os.makedirs(DATA_DIR, exist_ok=True)
+    script_path = os.path.abspath(__file__)
 
-    # Detached process creation flags on Windows
-    creationflags = 0
     if os.name == "nt":
-        creationflags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS
-
-    with open(log_path, "a", encoding="utf-8") as out_file:
-        proc = subprocess.Popen(
-            [PYTHON_BIN, os.path.abspath(__file__), "--interval", str(interval_minutes)],
+        # Launch fully detached background process via PowerShell Start-Process
+        ps_cmd = (
+            f"Start-Process -FilePath '{PYTHON_BIN}' "
+            f"-ArgumentList @('{script_path}', '--interval', '{interval_minutes}') "
+            f"-WorkingDirectory '{PROJECT_ROOT}' "
+            f"-RedirectStandardOutput '{log_path}' "
+            f"-RedirectStandardError '{log_path}' "
+            f"-WindowStyle Hidden -PassThru"
+        )
+        try:
+            subprocess.run(
+                ["powershell", "-NoProfile", "-NonInteractive", "-Command", ps_cmd],
+                capture_output=True,
+                check=True
+            )
+        except Exception:
+            # Fallback to direct subprocess.Popen
+            creationflags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS
+            out_file = open(log_path, "a", encoding="utf-8")
+            subprocess.Popen(
+                [PYTHON_BIN, script_path, "--interval", str(interval_minutes)],
+                cwd=PROJECT_ROOT,
+                stdout=out_file,
+                stderr=out_file,
+                creationflags=creationflags,
+                close_fds=False
+            )
+    else:
+        out_file = open(log_path, "a", encoding="utf-8")
+        subprocess.Popen(
+            [PYTHON_BIN, script_path, "--interval", str(interval_minutes)],
             cwd=PROJECT_ROOT,
             stdout=out_file,
             stderr=out_file,
-            creationflags=creationflags,
-            close_fds=(os.name != "nt")
+            close_fds=True
         )
 
-    # Allow process to write its PID
-    time.sleep(1.5)
-    print(f"🚀 AutoJobHunt Daemon launched in the background (PID: {proc.pid}).")
+    # Wait for process to write PID
+    pid = None
+    for _ in range(8):
+        time.sleep(0.5)
+        pid = get_active_daemon_pid()
+        if pid:
+            break
+
+    pid_str = str(pid) if pid else "Active"
+    print(f"🚀 AutoJobHunt Daemon launched in the background (PID: {pid_str}).")
     print(f"   • Polling Interval: Every {interval_minutes} minutes")
     print(f"   • Daemon Log:       {LOG_FILE}")
     print(f"   • Process Log:      {log_path}")
